@@ -33,6 +33,12 @@ list_matrix_1 = {'+': list__1, '*': list__2, 'i': list__3, '(': list__4, ')': li
 __list_var = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E', 6: 'F', 7: 'G', 8: 'H', 9: 'I', 10: 'J', 11: 'K', 12: 'L',
               13: 'M', 14: 'N', 15: 'O', 16: 'O', 17: 'Q', 18: 'R', 19: 'S', 20: 'T'}
 
+'''
+词法分析可以处理各种语句
+语法分析可以处理+ * 和加括号的表达式
+语义分析可以处理+ * 的表达式
+'''
+
 
 def __token(__str_0):
     right = 1
@@ -78,6 +84,9 @@ def __pretreatment(__str_0):
     return __signal_list
 
 
+# 以下是两种输出方法
+
+
 def __print_signal_list(__signal_list):
     for item in __signal_list:
         if item in __key_dictionary:
@@ -87,6 +96,18 @@ def __print_signal_list(__signal_list):
                 __signal_list_with_num.append([item, 40])
             else:
                 __signal_list_with_num.append([item, 39])
+    print(__signal_list_with_num)
+
+
+def __print_signal_list_2(__signal_list):
+    for item in __signal_list:
+        if item in __key_dictionary:
+            __signal_list_with_num.append([__key_dictionary[item], '-'])
+        else:
+            if item[0].isdigit():
+                __signal_list_with_num.append([40, '|'])
+            else:
+                __signal_list_with_num.append([39, '|'])
     print(__signal_list_with_num)
 
 
@@ -153,8 +174,6 @@ def __bottom_to_top(list_input):
                     j = j - 2
                 if list_matrix_1[s[j]][q] == '<':  # 书上的这里写错了
                     break
-            # print(s)
-            # 现在要进行归约，有可能是把i换成N，也有可能是把N*N或者N+N或者(N)换成N
             __var_num += 1
             __var = __list_var[__var_num]
             if k != j + 1 and s[k] != ')':  # 不是把I换成N
@@ -184,15 +203,15 @@ def __bottom_to_top(list_input):
 
 
 def main():
-    _str = 'i+i'
-    str_0 = 'i+i*i'
-    str_00 = '(i+i)*(i+i)'
+    _str = 'i+i*i'
+    str_0 = 'i+i*i+i'
+    str_00 = 'i+i*i*i+i'
     # str_1 = input('请输入想要进行词法分析的字符串：')
-
-    __signal_list_1 = __pretreatment(str_0)  # 词法分析的输出结果
-    print('词法分析的结果为:')
-    __print_signal_list(__signal_list)
-
+    __signal_list_1 = __pretreatment(_str)  # 词法分析的输出结果
+    print('词法分析的输入串为：', end='')
+    print(''.join(__signal_list_1))
+    print('词法分析的结果为:', end='')
+    __print_signal_list_2(__signal_list)
     __signal_list_1.append('#')  # 作为语法分析的输入
     print('语法分析的结果为：')
     __top_to_bottom(__signal_list_1)
